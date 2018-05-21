@@ -1,5 +1,6 @@
 'use strict';
 
+// Load array of notes
 const data = require('./db/notes');
 
 console.log('Hello Noteful!');
