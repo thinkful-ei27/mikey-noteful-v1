@@ -12,18 +12,19 @@ const app = express();
 app.use(express.static('public'));
 
 app.get('/api/notes', (req, res) => {
-  res.json(data);
+  const searchTerm = req.query.searchTerm;
+  if(searchTerm){
+    let filteredNotes = data.filter(item =>
+    {return item.title.includes(searchTerm);});
+    res.json(filteredNotes); 
+  }
+  else {res.json(data);}
 });
+    
 
 app.get('/api/notes/:id', (req, res)=> {
   const { id } = req.params;
-  
   let requestedNote = data.find(item => item.id === Number(id));
-  // for (let i = 0; i < data.length; i++){
-  //   if(data[i].id === id ){
-  //     requestedNote = data[i];
-  //   }
-  
   res.json(requestedNote);
 });
 
