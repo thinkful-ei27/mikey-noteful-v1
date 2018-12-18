@@ -26,11 +26,17 @@ app.get('/api/notes', (req, res, next) => {
   });
 });
 
-app.get('/api/notes/:id', (req, res) => {
+app.get('/api/notes/:id', (req, res, next) => {
   const { id } = req.params;
-  let requestedNote = data.find(item => item.id === Number(id));
-  res.json(requestedNote);
+  notes.find(id,(err, list) => {
+    if (err) {
+      return next(err); 
+    }
+    res.json(list); 
+  });
 });
+
+
 // app.get('/boom' , (req, res, next) => {
 //   throw new Error('Boom !!');
 // });

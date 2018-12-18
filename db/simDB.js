@@ -7,7 +7,7 @@ const simDB = {
 
   // Synchronous Initialize
   initialize: function(data) {
-    this.nextVal = 1000;
+    this.nextVal = 1001;
     this.data = data.map(item => {
       item.id = this.nextVal++;
       return item;
