@@ -30,9 +30,9 @@ app.get('/api/notes/:id', (req, res)=> {
   let requestedNote = data.find(item => item.id === Number(id));
   res.json(requestedNote);
 });
-app.get('/boom' , (req, res, next) => {
-  throw new Error('Boom !!');
-});
+// app.get('/boom' , (req, res, next) => {
+//   throw new Error('Boom !!');
+// });
 
 app.use(function(req, res , next) {
   let err = new Error('not Found');
