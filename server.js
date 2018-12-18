@@ -2,14 +2,17 @@
 
 const {PORT} = require('./config');
 const data = require('./db/notes');
+const {requestLogger} = require('./middleware/logger');
+
 
 console.log('Hello Noteful!');
 
 const express = require('express');
 
 const app = express();
-// Static server VV
+// Static server VVV
 app.use(express.static('public'));
+app.use(requestLogger);
 
 app.get('/api/notes', (req, res) => {
   const searchTerm = req.query.searchTerm;
