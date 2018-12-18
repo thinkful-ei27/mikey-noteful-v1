@@ -1,8 +1,10 @@
 'use strict';
 
-const {PORT} = require('./config');
+const { PORT } = require('./config');
 const data = require('./db/notes');
-const {requestLogger} = require('./middleware/logger');
+const simDB = require('./db/simDB');
+const notes = simDB.initialize(data);
+const { requestLogger } = require('./middleware/logger');
 
 
 console.log('Hello Noteful!');
@@ -14,18 +16,17 @@ const app = express();
 app.use(express.static('public'));
 app.use(requestLogger);
 
-app.get('/api/notes', (req, res) => {
-  const searchTerm = req.query.searchTerm;
-  if(searchTerm){
-    let filteredNotes = data.filter(item =>
-    {return item.title.includes(searchTerm);});
-    res.json(filteredNotes); 
-  }
-  else {res.json(data);}
+app.get('/api/notes', (req, res, next) => {
+  const { searchTerm } = req.query;
+  notes.filter(searchTerm, (err, list) => {
+    if (err) {
+      return next(err); // goes to error handler
+    }
+    res.json(list); // responds with filtered array
+  });
 });
-    
 
-app.get('/api/notes/:id', (req, res)=> {
+app.get('/api/notes/:id', (req, res) => {
   const { id } = req.params;
   let requestedNote = data.find(item => item.id === Number(id));
   res.json(requestedNote);
@@ -34,7 +35,7 @@ app.get('/api/notes/:id', (req, res)=> {
 //   throw new Error('Boom !!');
 // });
 
-app.use(function(req, res , next) {
+app.use(function (req, res, next) {
   let err = new Error('not Found');
   err.status = 404;
   res.status(404).json({ message: 'not Found' });
@@ -43,8 +44,8 @@ app.use(function(req, res , next) {
 app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.json({
-    message : err.message,
-    error : err
+    message: err.message,
+    error: err
   });
 });
 
