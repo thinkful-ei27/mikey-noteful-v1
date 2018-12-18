@@ -1,6 +1,6 @@
 'use strict';
 
-
+const {PORT} = require('./config');
 const data = require('./db/notes');
 
 console.log('Hello Noteful!');
@@ -28,7 +28,7 @@ app.get('/api/notes/:id', (req, res)=> {
   res.json(requestedNote);
 });
 
-app.listen(8080, function () {
+app.listen(PORT, function () {
   console.info(`Server listening on ${this.address().port}`);
 }).on('error', err => {
   console.error(err);
