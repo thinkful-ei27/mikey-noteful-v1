@@ -12,9 +12,12 @@ console.log('Hello Noteful!');
 const express = require('express');
 
 const app = express();
-// Static server VVV
-app.use(express.static('public'));
+
 app.use(requestLogger);
+// Static server VVV, below logger to log .static get request
+app.use(express.static('public'));
+app.use(express.json());
+
 
 app.get('/api/notes', (req, res, next) => {
   const { searchTerm } = req.query;
@@ -33,6 +36,31 @@ app.get('/api/notes/:id', (req, res, next) => {
       return next(err); 
     }
     res.json(list); 
+  });
+});
+
+app.put('/api/notes/:id', (req, res, next) => {
+  const id = req.params.id;
+
+  /***** Never trust users - validate input *****/
+  const updateObj = {};
+  const updateFields = ['title', 'content'];
+
+  updateFields.forEach(field => {
+    if (field in req.body) {
+      updateObj[field] = req.body[field];
+    }
+  });
+
+  notes.update(id, updateObj, (err, item) => {
+    if (err) {
+      return next(err);
+    }
+    if (item) {
+      res.json(item);
+    } else {
+      next();
+    }
   });
 });
 
