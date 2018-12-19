@@ -10,10 +10,11 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "start":"node server.js",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "morgan": "^1.9.1"
   }
 }
