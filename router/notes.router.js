@@ -14,23 +14,34 @@ const router = express.Router();
 
 router.get('/notes', (req, res, next) => {
   const { searchTerm } = req.query;
-  notes.filter(searchTerm, (err, list) => {
-    if (err) {
-      return next(err); // goes to error handler
-    }
-    res.json(list); // responds with filtered array
-  });
+  notes.filter(searchTerm)
+    .then(list =>{
+      if(list){
+        res.json(list);
+      } else{
+        next();
+      }
+    })
+    .catch(err => next(err));
 });
+
+
 
 router.get('/notes/:id', (req, res, next) => {
   const { id } = req.params;
-  notes.find(id,(err, list) => {
-    if (err) {
-      return next(err); 
-    }
-    res.json(list); 
-  });
+  notes.find(id)
+    .then( item => {
+      if(item){
+        res.json(item);
+      } else{
+        next();
+      }
+    })
+    .catch(err => {
+      next(err);
+    });
 });
+
 
 router.put('/notes/:id', (req, res, next) => {
   const id = req.params.id;
