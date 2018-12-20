@@ -67,19 +67,6 @@ router.put('/notes/:id', (req, res, next) => {
     .catch(err => next(err));
 });
 
-
-
-// (err, item) => {
-//   if (err) {
-//     return next(err);
-//   }
-//   if (item) {
-//     res.json(item);
-//   } else {
-//     next();
-//   }
-// });
-
 router.post('/notes', (req, res, next) => {
   const { title, content } = req.body;
 
@@ -106,14 +93,19 @@ router.post('/notes', (req, res, next) => {
 router.delete ( '/notes/:id', (req, res, next) => {
   const id = req.params.id;
 
-  notes.delete(id, (err) => {
-    if(err){
-      return next(err);
-    }
-    res.status(204).end();
-  });
-  
+  notes.delete(id)
+    .then(res.status(204).end())
+    .catch(err => next(err));
 });
+
+
+
+// (err) => {
+//   if(err){
+//     return next(err);
+//   }
+//   res.status(204).end();
+// });
 
 // app.get('/boom' , (req, res, next) => {
 //   throw new Error('Boom !!');
