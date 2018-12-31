@@ -41,3 +41,21 @@ describe('404 handler', function () {
       });
   });
 });
+
+describe ('GET api/notes', function(){
+  it( 'should return default 11 notes as an array', function () {
+    return chai.request(app)
+      .get('/api/notes')
+      .then( function (res) {
+        expect(res).to.exist;
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.an('array');
+        expect(res.body.length).to.be.above(0);
+        res.body.forEach(function(item){
+          expect(item).to.be.a('object');
+          expect(item).to.have.all.keys(
+            'id', 'title', 'content');
+        });
+      });
+  });
+});
