@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "test": "mocha -w"
+    "test": "mocha"
   },
   "dependencies": {
     "express": "^4.16.4",
